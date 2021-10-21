@@ -1,4 +1,4 @@
-# Dev Guide
+# Dev Guide for IoT Edge Repo
 
 IoT Edge is written in C# and Rust.
 The C# development setup is described below. The Rust development setup is described [here](../edgelet/README.md).
