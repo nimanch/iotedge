@@ -2,7 +2,7 @@
 
 The IoT Edge Hub and Edge Agent module expose a number of metrics in the Prometheus exposition format that provide insights into its operational state.
 
-## How to enable
+## How to enable Metrics
 ### Version 1.0.10+
 As of release 1.0.10, metrics are automatically exposed by default on http port **9600** of the Edge Hub and Edge Agent module. 
 
