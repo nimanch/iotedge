@@ -1,5 +1,7 @@
 //! This module contains the module client and module message types.
 
+use mqtt3::proto::SubscribeTo;
+
 /// A client for the Azure IoT Hub MQTT protocol. This client receives module-level messages.
 ///
 /// A `Client` is a [`Stream`] of [`Message`]s. These messages contain twin state messages and direct method requests.
@@ -189,6 +191,25 @@ impl Client {
     pub fn report_twin_state_handle(&self) -> crate::ReportTwinStateHandle {
         self.reported_properties.report_twin_state_handle()
     }
+
+	pub fn add_subscriptions(&mut self, subscriptions: Vec<SubscribeTo>)->Result<(), crate::CreateClientError>{
+
+		for subscribe_to in subscriptions {
+			match self.inner.subscribe(subscribe_to) {
+				Ok(()) => (),
+	
+				// The subscription can only fail with this error if `inner` has shut down, which is not the case here
+				Err(mqtt3::UpdateSubscriptionError::ClientDoesNotExist) => unreachable!(),
+	
+				Err(err @ mqtt3::UpdateSubscriptionError::EncodePacket(..)) => {
+					return Err(crate::CreateClientError::InvalidDefaultSubscription(err))
+				}
+			}
+		}
+	
+		Ok(())
+		
+	}
 }
 
 impl futures_core::Stream for Client {
