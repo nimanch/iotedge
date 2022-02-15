@@ -271,10 +271,10 @@ impl futures_core::Stream for Client {
 										topic_name,
 										payload,
 									}) => {
-										return std::task::Poll::Ready(Some(Ok(Message::CustomMessage {
+										return std::task::Poll::Ready(Some(Ok(Message::DefaultMessage(CustomMessage {
 											topic_name,
 											payload,
-										})));
+										}))));
 									}
 
 								Err(err) =>
@@ -347,10 +347,10 @@ impl futures_core::Stream for Client {
                                 topic_name,
                                 payload,
                             }) => {
-                                return std::task::Poll::Ready(Some(Ok(Message::CustomMessage {
+                                return std::task::Poll::Ready(Some(Ok(Message::DefaultMessage(CustomMessage {
                                     topic_name,
                                     payload,
-                                })));
+                                }))));
                             }
 
                             Err(err) => {
@@ -460,10 +460,14 @@ pub enum Message {
     /// A patch to the twin state that should be applied to the current state to get the new state.
     TwinPatch(crate::TwinProperties),
 
-    CustomMessage {
-        topic_name: String,
-        payload: serde_json::Value,
-    },
+    DefaultMessage(CustomMessage)
+}
+
+#[derive(Debug,Clone)]
+#[allow(dead_code)]
+pub struct CustomMessage{
+    topic_name: String,
+    payload: serde_json::Value,
 }
 
 #[derive(Debug)]
