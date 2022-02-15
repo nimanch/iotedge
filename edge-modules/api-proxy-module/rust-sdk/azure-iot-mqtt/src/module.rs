@@ -466,8 +466,8 @@ pub enum Message {
 #[derive(Debug,Clone)]
 #[allow(dead_code)]
 pub struct CustomMessage{
-    topic_name: String,
-    payload: serde_json::Value,
+    pub topic_name: String,
+    pub payload: serde_json::Value,
 }
 
 #[derive(Debug)]
