@@ -29,6 +29,7 @@ pub mod iotedge_client;
 pub mod module;
 
 mod system_properties;
+use mqtt3::proto::SubscribeTo;
 pub use system_properties::{ IotHubAck, SystemProperties };
 
 mod twin_state;
@@ -212,6 +213,7 @@ fn client_new(
 
 	max_back_off: std::time::Duration,
 	keep_alive: std::time::Duration,
+	optional_subscribe: Option<Vec<SubscribeTo>>
 ) -> Result<(mqtt3::Client<crate::IoSource>, usize), crate::CreateClientError> {
 	let client_id =
 		if let Some(module_id) = &module_id {
@@ -257,7 +259,7 @@ fn client_new(
 		keep_alive,
 	);
 
-	let default_subscriptions = vec![
+	let mut default_subscriptions = vec![
 		// Twin initial GET response
 		mqtt3::proto::SubscribeTo {
 			topic_filter: "$iothub/twin/res/#".to_string(),
@@ -276,7 +278,10 @@ fn client_new(
 			qos: mqtt3::proto::QoS::AtLeastOnce,
 		},
 	];
-
+	if let Some(mut topics) = optional_subscribe{
+		default_subscriptions.append(&mut topics);
+	}
+	
 	let num_default_subscriptions = default_subscriptions.len();
 
 	for subscribe_to in default_subscriptions {

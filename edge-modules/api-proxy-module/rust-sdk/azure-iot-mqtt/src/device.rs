@@ -88,6 +88,7 @@ impl Client {
 
 			max_back_off,
 			keep_alive,
+			None
 		)?;
 
 		let (direct_method_response_send, direct_method_response_recv) = futures_channel::mpsc::channel(0);
