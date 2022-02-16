@@ -359,7 +359,8 @@ impl futures_core::Stream for Client {
                             }
                         },
 
-                        // Don't expect any subscription updates at this point
+                        
+                        // Todo : Is this the right place to handle subscription updates?
                         std::task::Poll::Ready(Some(Ok(mqtt3::Event::SubscriptionUpdates(_)))) => {
                             continue_loop = true;
                             None
