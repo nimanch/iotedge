@@ -361,7 +361,8 @@ impl futures_core::Stream for Client {
 
                         // Don't expect any subscription updates at this point
                         std::task::Poll::Ready(Some(Ok(mqtt3::Event::SubscriptionUpdates(_)))) => {
-                            unreachable!()
+                            continue_loop = true;
+                            None
                         }
 
                         std::task::Poll::Ready(Some(Ok(mqtt3::Event::Disconnected(_)))) => continue,
