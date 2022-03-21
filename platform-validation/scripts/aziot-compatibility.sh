@@ -68,6 +68,7 @@ wrap_color() {
     echo
 }
 
+
 wrap_good() {
     if [ $VERBOSE -eq 1 ]; then
         echo "$(wrap_color "$1" white): $(wrap_color "$2" green)"
@@ -557,6 +558,7 @@ check_docker_api_version() {
     if [ $? != 0 ]; then
         wrap_warning "check_docker_api_version"
         wrap_warning_message "Could not get Docker Version"
+        return
     fi
 
     wrap_debug_message "Docker API Version is $version, Minimum Docker Version Required is $1"
@@ -583,6 +585,7 @@ check_shared_library_dependency() {
             else
                 ret=$(ldconfig -p | grep "$lib")
                 if [ -z "$ret" ]; then
+                    wrap_fail "library_$lib"
                     display_missing_library_warning "$lib"
                 else
                     wrap_pass "library_$lib"
@@ -855,5 +858,5 @@ if [ $FAILURES -gt 0 ]; then
 elif [ $WARNINGS -gt 0 ]; then
     wrap_warning_message "$base_message"
 else
-    wrap_good "$base_message"
+    wrap_pass "$base_message" 
 fi

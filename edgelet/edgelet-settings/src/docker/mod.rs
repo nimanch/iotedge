@@ -21,7 +21,7 @@ impl Settings {
     ///
     /// Configuration is made up of /etc/aziot/edged/config.toml (overridden by the `AZIOT_EDGED_CONFIG` env var)
     /// and any files in the /etc/aziot/edged/config.d directory (overridden by the `AZIOT_EDGED_CONFIG_DIR` env var).
-    pub fn new() -> Result<Self, Box<dyn std::error::Error>> {
+    pub fn  new() -> Result<Self, Box<dyn std::error::Error>> {
         let config_path = std::env::var("AZIOT_EDGED_CONFIG")
             .unwrap_or_else(|_| "/etc/aziot/edged/config.toml".to_string());
         let config_path = std::path::Path::new(&config_path);
